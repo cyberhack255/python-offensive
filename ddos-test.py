@@ -1,12 +1,25 @@
 import requests
-import random
-import string
+import threading
 
-url = "https://pentestingkb.softnetsolutions.com.au"
-characters = string.ascii_letters + string.digits
+urls = [
+    "https://pentestingkb.softnetsolutions.com.au",
+    # ... add more URLs as needed
+]
 
-for i in range(3):
-    random_char =''.join(random.choice(characters) for i in range(10))
-    response = requests.get(f"{url}/{random_char}")
+def make_request(url):
+    response = requests.get(url)
+    print (response)
     # process response
-    print(random_char)
+
+threads = []
+for url in urls:
+    thread = threading.Thread(target=make_request, args=(url,))
+    thread.start()
+    threads.append(thread)
+    if len(threads) >= 200:
+        for thread in threads:
+            thread.join()
+        threads = []
+
+for thread in threads:
+    thread.join()

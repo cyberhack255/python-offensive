@@ -1,0 +1,1 @@
+query { cameras { id cameraName userName password cameraType }}
